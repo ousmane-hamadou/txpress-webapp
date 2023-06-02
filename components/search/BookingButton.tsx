@@ -17,5 +17,11 @@ function useSelection(searchId: string) {
 export default function BookingButton({ searchId }: { searchId: string }) {
   const { data } = useSelection(searchId);
 
-  return <>{data?._links.selection && <button>Book your selection</button>}</>;
+  return (
+    <>
+      {data?._links.selection && (
+        <button className="button is-primary ">Book your selection</button>
+      )}
+    </>
+  );
 }

@@ -7,18 +7,28 @@ import { useRouter } from "next/navigation";
 
 import { PERFORM_SEARCH_API_KEY } from "@/libs/constants";
 
-async function performSearch(
-  url: string,
-  { arg }: { arg: { departureId: string; arrivalId: string } }
-) {
+type Criteria = {
+  departureId: string;
+  arrivalId: string;
+};
+
+type Options = {
+  arg: Criteria;
+};
+
+async function performSearch(url: string, options: Options) {
+  const { arg } = options;
+  const data = {
+    arrival_id: arg.arrivalId,
+    departure_id: arg.departureId,
+  };
+  const headers = new Headers({ "Content-Type": "application" });
+
   return await fetch(url, {
     method: "post",
-    headers: new Headers({ "Content-Type": "application/json" }),
+    headers,
     credentials: "include",
-    body: JSON.stringify({
-      arrival_id: arg.arrivalId,
-      departure_id: arg.departureId,
-    }),
+    body: JSON.stringify(data),
   }).then((res) => res.json() as Promise<{ id: string }>);
 }
 
@@ -32,6 +42,33 @@ function usePerformSearch() {
     trigger,
     isMutating,
   };
+}
+
+type TagsProps = {
+  tags: { id: string; name: string }[];
+  onSelect: (id: string) => void;
+};
+
+function Tags(props: TagsProps) {
+  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const id = e.currentTarget.getAttribute("id") || "";
+    props.onSelect(id);
+  };
+
+  return (
+    <div className="tags">
+      {props.tags.map(({ id, name }) => (
+        <span
+          key={id}
+          id={id}
+          onClick={onClick}
+          className="tag is-clickable is-white"
+        >
+          {name}
+        </span>
+      ))}
+    </div>
+  );
 }
 
 export default function SearchForm({
@@ -73,69 +110,44 @@ export default function SearchForm({
   }
 
   return (
-    <form className="column is-8 is-offset-2">
-      <div className="columns">
-        <div className="column">
-          <div className="field">
-            <label htmlFor="departure" className="label">
-              Departure
-            </label>
+    <form className="columns is-multiline">
+      <div className="column is-6">
+        <div className="field">
+          <div className="control">
             <input
-              className="input is-medium"
+              className="input is-white"
               value={departure}
               onChange={handleDeparture}
               type="text"
-              id="departure"
+              placeholder="Choise your departure"
             />
-          </div>
-
-          <div className="tags">
-            {taxiRanks.map(({ id, name }) => (
-              <span
-                onClick={() => onDepartureClick(name)}
-                className="tag is-clickable"
-                key={id}
-              >
-                {name}
-              </span>
-            ))}
           </div>
         </div>
 
-        <div className="column">
-          <div className="field">
-            <label htmlFor="arrival" className="label">
-              Arrival
-            </label>
+        <Tags tags={taxiRanks} onSelect={(id) => {}} />
+      </div>
+
+      <div className="column is-6">
+        <div className="field">
+          <div className="control">
             <input
-              className="input is-medium"
+              className="input"
               value={arrival}
               onChange={handleArrival}
               type="text"
-              id="arrival"
+              placeholder="Choise your arrival"
             />
           </div>
-          <div className="tags">
-            {taxiRanks.map(({ id, name }) => (
-              <span
-                onClick={() => onArrivalClick(name)}
-                className="tag is-clickable"
-                key={id}
-              >
-                {name}
-              </span>
-            ))}
-          </div>
         </div>
+        <Tags tags={taxiRanks} onSelect={(id) => {}} />
       </div>
 
-      <div className="column is-offset-3 is-6">
+      <div className="column is-offset-4 is-4">
         <button
-          className={`button is-rounded is-dark is-fullwidth ${
+          className={`button is-rounded is-link is-fullwidth ${
             isMutating && "is-loading"
           }`}
           type="submit"
-          disabled={departure.trim().length == 0 || arrival.trim().length == 0}
           onClick={performSearch}
         >
           Search

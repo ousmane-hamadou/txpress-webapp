@@ -1,7 +1,8 @@
+import { preFetchTaxiRanks } from "@/libs/getTaxiRanks";
+import { preFetchTaxiOwner } from "@/libs/getTaxiOwner";
 import "bulma/css/bulma.min.css";
 
-import Logo from "@/components/Logo";
-import TopBar from "@/components/home/TopBar";
+preFetchTaxiRanks();
 
 export default function HomeLayout({
   children,
@@ -10,10 +11,7 @@ export default function HomeLayout({
 }) {
   return (
     <html>
-      <body>
-        <TopBar logo={<Logo />} />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

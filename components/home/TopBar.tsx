@@ -1,6 +1,9 @@
-import Link from "next/link";
+interface Props {
+  actions: React.ReactNode;
+  logo: React.ReactNode;
+}
 
-export default function TopBar({ logo }: { logo: React.ReactNode }) {
+export default function TopBar(props: Props) {
   return (
     <nav
       className="navbar has-shadow"
@@ -9,27 +12,12 @@ export default function TopBar({ logo }: { logo: React.ReactNode }) {
     >
       <div className="container">
         <div className="navbar-brand">
-          <div className="navbar-item">{logo}</div>
+          <div className="navbar-item">{props.logo}</div>
         </div>
+
         <div className="navbar-menu">
           <div className="navbar-end">
-            <div className="navbar-item">
-              <div className="buttons">
-                <Link
-                  href="/sign-in"
-                  className="button is-link is-small is-light"
-                >
-                  Sign In
-                </Link>
-
-                <Link
-                  className="button is-small is-outlined is-dark"
-                  href="/sign-up"
-                >
-                  Sign Up
-                </Link>
-              </div>
-            </div>
+            <div className="navbar-item">{props.actions}</div>
           </div>
         </div>
       </div>

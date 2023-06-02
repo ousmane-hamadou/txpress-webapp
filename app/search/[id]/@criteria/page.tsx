@@ -3,8 +3,8 @@ import { cookies } from "next/headers";
 import { Suspense } from "react";
 
 import { PERFORM_SEARCH_API_KEY } from "@/libs/constants";
-import ArrivalStand from "@/components/search/criteria/ArrivalStand";
-import DepartureStand from "@/components/search/criteria/DepartureStand";
+import ArrivalStand from "@/components/stand/ArrivalStand";
+import DepartureStand from "@/components/stand/DepartureStand";
 
 async function getSearchCriteria(searchId: string) {
   let cookieStore = cookies();

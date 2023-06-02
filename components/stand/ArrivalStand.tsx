@@ -1,11 +1,11 @@
 import Stand from "./Stand";
 import LocationOn from "@/components/icons/LocationOn";
 
-export default async function ArrivalStand({
+export default function ArrivalStand({
   stand,
 }: {
-  stand: Promise<{ id: string; name: string }>;
+  stand: { id: string; name: string };
 }) {
-  const { name } = await stand;
+  const { name } = stand;
   return <Stand criteria="Arrival Stand" stand={name} icon={<LocationOn />} />;
 }
